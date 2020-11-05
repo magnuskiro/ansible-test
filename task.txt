@@ -1,0 +1,43 @@
+Task to be written as playbooks in Ansible
+
+ Playbook 1 
+Grant sudo access to admin users
+   - install package sudo 
+  - create group 'sudo_root' with gid 500
+ - ensure all members of this group can execute any command without password on DEV and TEST environments but require sudo password auth on PROD
+ NOTES:
+   - host OS are either RHEL, OEL or Debian
+   - there are 3 different ansible inventories organized in 3 static files named DEV, TEST and PROD for the three environments. 
+    The playbook will be executed against each environment using command like:
+      ansible-playbook -i DEV sudo.yml
+   - to allow sudo access without password add the following line to /etc/sudoers:
+      %sudo_root ALL=(ALL) NOPASSWD: ALL
+    to enforce password the line is:
+      %sudo_root ALL=(ALL) ALL
+    * this must be achieved with a single task using variables with different values for the different environments. Creating different tasks which are conditionally executed depending on the environment is not acceptable
+ 
+Playbook 2
+Install and configure LogInsight agent (liagent)
+   - install LogInsight package is installed on all hosts
+  - ensure liagentd service (provided with package installation) is  enabled and started
+  - ensure liagent is reporting to the correct loginsight server (frk or vie - see notes):
+  - ensure liagent is configured to receive auto updates:
+    "auto_update=yes" and "package_type=deb|rpm" in the [update] section of the config file
+  - ensure liagentd service is restarted if configuration file is changed.
+ NOTES:
+   - host OS are either RHEL, OEL or Debian
+   - LogInsight agent packages are available in /files/ directory on the ansible controller and are named LogInsight-1.2.3.rpm and
+    LogInsight-1.2.3.deb (names and versions might change)
+   - there are 2 different inventories organized in 2 static files named FRK and VIE
+    The playbook will be executed against each environment using command like:
+      ansible-playbook -i FRK liagent.yml
+   - Each datacenter has its own Loginsight server named  vip-li.vie.company.com and vip-li.frk.company.com.
+   hosts in FRK should have 'hostname=vip-li.frk' set in the [server] section of the ini file
+    hosts in VIE should have 'hostname=vip-li.vie' set in the [server] section of the ini file
+    * this must be achieved with a single task using variables with different values  for the different environments
+      - liagentd configuration file is /var/lib/loginsight-agent/liagent.ini.
+    It must contain all config options specified in file /files/liagent.ini.sample on the ansible controller
+   - for the liagent configuration, candidates are encouraged to use template file
+    - for both tasks candidates are encouraged to add any groups to the inventory 
+    to allow using group_vars (see https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#group-and-host-variables )
+    However the play scope must include all hosts in the inventory (hosts: all)
