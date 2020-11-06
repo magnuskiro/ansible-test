@@ -6,7 +6,7 @@ creating an ansible setup with 6 nodes, 2 inventories, 3 environments
 linux mint (ubuntu sort)
 
 ## Prerequisites: 
-Install: ansible, docker, docker-compose
+Install: ansible, docker, docker-compose, sshpass
 
 ## Setup 
 `docker build -f debian-ssh -t debian-ssh:latest .`
