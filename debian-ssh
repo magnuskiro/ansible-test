@@ -1,0 +1,20 @@
+FROM debian:latest
+
+# Install ssh server
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+
+# add user 
+RUN echo 'root:test' | chpasswd
+RUN useradd test \
+	&& echo 'test:test123' | chpasswd \
+	&& mkdir /home/test \
+	&& chown test:test /home/test \
+	&& addgroup test sudo
+
+
+# allow traffic on port 22
+EXPOSE 22
+
+CMD ["service ssh start", "-d"]
+

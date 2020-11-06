@@ -3,13 +3,13 @@ version: "3.5"
 # services / containers to start.
 services:
   dev:
-    image: debian:latest
+    image: debian-ssh:latest
     hostname: 'vipps-dev-1'
     restart: on-failure
     command: ["sleep","infinity"]
     networks:
         node_net:
-          ipv4_address: 172.28.11.2
+          ipv4_address: 172.22.11.2
 
 # networking for the Redis container
 networks:
@@ -17,4 +17,4 @@ networks:
       ipam:
         driver: default
         config:
-          - subnet: 172.28.11.0/24
+          - subnet: 172.22.11.0/24
