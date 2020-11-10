@@ -29,11 +29,23 @@ services:
           node_net:
             ipv4_address: 172.22.11.4
 
-  # Machines to created test env for.
-  # To replicate the the dual site three env setup of the task definition.
-  # dev-dc2
-  # test-dc2
-  # prod-dc2
+  frk:
+      image: debian-ssh:latest
+      hostname: 'ansible-frk-1'
+      restart: on-failure
+      command: ["sleep","infinity"]
+      networks:
+          node_net:
+            ipv4_address: 172.22.11.11
+
+  vie:
+      image: debian-ssh:latest
+      hostname: 'ansible-vie-1'
+      restart: on-failure
+      command: ["sleep","infinity"]
+      networks:
+          node_net:
+            ipv4_address: 172.22.11.12
 
 # networking for the Redis container
 networks:
