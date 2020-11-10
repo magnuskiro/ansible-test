@@ -1,13 +1,13 @@
 ---
 # file: sudo.yml
 - hosts: all
-
-  # list for root pw permissions based on env.
-  # pw should be required in PROD
-  rootpw: # https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#dictionary-variables
-    DEV: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
-    TEST: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
-    PROD: "%sudo_root ALL=(ALL) ALL"
+  vars:
+    # list for root pw permissions based on env.
+    # pw should be required in PROD
+    rootpw: # https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#dictionary-variables
+      DEV: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
+      TEST: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
+      PROD: "%sudo_root ALL=(ALL) ALL"
 
   tasks: 
     - name: install sudo
