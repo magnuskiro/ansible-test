@@ -1,0 +1,27 @@
+---
+# file: sudo.yml
+- hosts: all
+
+  # list for root pw permissions based on env.
+  # pw should be required in PROD
+  rootpw: # https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#dictionary-variables
+    DEV: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
+    TEST: "%sudo_root ALL=(ALL) NOPASSWD: ALL"
+    PROD: "%sudo_root ALL=(ALL) ALL"
+
+  tasks: 
+    - name: install sudo
+      apt:
+        name: sudo
+        state: present
+
+    - name: Add 'sudo_root' group
+      group: # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html
+        name: sudo_root
+        state: present
+        gid: 500
+
+    - name: append pw policy to sudoers
+      lineinfile: # adding lines to a file: https://www.mydailytutorials.com/ansible-add-line-to-file/
+        path: /etc/sudoers
+        line: rootpw.{{ inventory_file }} # ref https://docs.ansible.com/ansible/latest/user_guide/playbooks_vars_facts.html#information-about-ansible-magic-variables
