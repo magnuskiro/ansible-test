@@ -1,0 +1,31 @@
+---
+# file: sudo.yml
+- hosts: all
+  tasks: 
+    - name: install
+      package:
+        # should ideally handle deb or rpm in the same task
+        name: "{{ liagent_install_file }}" # example /files/LogInsight-1.2.3.deb 
+        state: present # cannot be latest, as we don't have a package manager (which would be preferred)
+        #use: auto # is auto by default. 
+              
+        # install from '/files/' on local machine/ ansible host / point og playbook execution. 
+      become: true # needs root for installation privileges.
+
+    - name: configure 
+      template: # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+        src: liagent.ini.j2
+        dest: /var/lib/loginsight-agent/liagent.ini
+        # given the examples in the docs these fields are nice. Quite likely needed as well.
+        owner: 'root' 
+        group: 'root'
+        mode: 0644
+
+    - name: ensure liagentd service is started 
+      service: 
+        name: liagentd
+        state: started
+        enabled: yes
+
+    # auto restart after config update is not needed. As mentioned in earlier base configs: 
+    # ; Note: Restarting the agent is not required after making a configuration change
