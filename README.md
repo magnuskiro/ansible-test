@@ -26,7 +26,7 @@ Then we can do
 
 ## Testing
 Enter the first container to check that changes has been applied.
-`docker exec -it vipps-test_dev_1 bash`
+`docker exec -it ansible-test_dev_1 bash`
 
 ## Run ansible
 ... test commands go here.

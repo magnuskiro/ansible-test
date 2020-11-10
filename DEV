@@ -1,0 +1,3 @@
+# see docker-compose.yml for defined ip addresses in this example case
+[DEV]
+172.22.11.2
