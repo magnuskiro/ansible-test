@@ -1,0 +1,8 @@
+[all]
+172.22.11.11 # dummy address
+
+[all:vars]
+insights_server=vip-li.frk.company.com
+liagent_install_file=/files/LogInsight-1.2.3.deb
+liagent_auto_update=yes
+liagent_package_type=deb|rpm
