@@ -11,6 +11,14 @@ services:
         node_net:
           ipv4_address: 172.22.11.2
 
+  # Machines to created test env for.
+  # To replicate the the dual site three env setup of the task definition.
+  # dev-dc2
+  # test-dc1
+  # test-dc2
+  # prod-dc1
+  # prod-dc2
+
 # networking for the Redis container
 networks:
     node_net:

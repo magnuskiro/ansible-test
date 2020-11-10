@@ -9,7 +9,11 @@ linux mint (ubuntu sort)
 Install: ansible, docker, docker-compose, sshpass
 
 ## Setup 
-`docker build -f debian-ssh -t debian-ssh:latest .`
+```
+docker build -f debian-ssh -t debian-ssh:latest . \
+  --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" \
+  --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)"
+```
 
 `docker-compose up -d `
 

@@ -3,22 +3,32 @@ FROM debian:latest
 # Install ssh server
 RUN apt-get update && \
 	apt-get install -y \
-		openssh-server
-		python
+		openssh-server python
 
 RUN mkdir /var/run/sshd
 
-# add user 
+# set root user password
 RUN echo 'root:test' | chpasswd
+
+# add user 
 RUN useradd test \
 	&& echo 'test:test123' | chpasswd \
 	&& mkdir /home/test \
 	&& chown test:test /home/test \
 	&& addgroup test sudo
 
+# Authorize SSH Host
+RUN mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh
+
+# Add the keys and set permissions
+RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
+    echo "$ssh_pub_key" > /root/.ssh/id_rsa.pub && \
+    chmod 600 /root/.ssh/id_rsa && \
+    chmod 600 /root/.ssh/id_rsa.pub
 
 # allow traffic on port 22
 EXPOSE 22
 
-CMD ["service ssh start", "-d"]
+CMD ["service ssh restart", "-d"]
 
